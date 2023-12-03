@@ -33,13 +33,11 @@ function surroundingNums(schematic: string[][], point: Point): number[] {
   const { x, y } = point;
   const nums: number[] = [];
 
-  let formatLine = "";
   let num = "";
   let isNeighbor = false;
   for (let py = y - 1; py <= y + 1; py++) {
     for (let px = 0; px < schematic[0].length; px++) {
       const value = schematic[py][px];
-      formatLine += value;
       if (validNums.includes(value)) {
         num += value;
 
@@ -54,7 +52,6 @@ function surroundingNums(schematic: string[][], point: Point): number[] {
         isNeighbor = false;
       }
     }
-    formatLine += "\n";
   }
 
   return nums;
