@@ -1,5 +1,5 @@
 export const x = "";
-const input = await Deno.readTextFile("./test.txt");
+const input = await Deno.readTextFile("./input.txt");
 
 const lines = input.split("\n");
 const instructions = lines[0];
@@ -19,25 +19,18 @@ lines.slice(2).filter((x) => x).forEach((line) => {
 
 let step = 0;
 let idx = 0;
-const startingNodes: Map<string, string> = new Map();
-map.forEach((_, k) => {
-  if (k.endsWith("A")) {
-    startingNodes.set(k, k);
+let curr = "AAA";
+
+while (curr !== "ZZZ") {
+  const { left, right } = map.get(curr)!;
+  if (instructions[idx] === "L") {
+    curr = left;
+  } else {
+    curr = right;
   }
-});
 
-console.log({ startingNodes });
-
-// while (curr !== "ZZZ") {
-//   const { left, right } = map.get(curr)!;
-//   if (instructions[idx] === "L") {
-//     curr = left;
-//   } else {
-//     curr = right;
-//   }
-//
-//   idx = (idx + 1) % instructions.length;
-//   step++;
-// }
+  idx = (idx + 1) % instructions.length;
+  step++;
+}
 
 console.log("answer", step);
