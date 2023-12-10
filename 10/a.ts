@@ -61,4 +61,4 @@ while (stack.length) {
   }
 }
 
-console.log("answer", (maxDepth + 1) / 2);
+console.log("answer", Math.round(maxDepth / 2));
