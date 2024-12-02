@@ -1,55 +1,43 @@
-defmodule Aoc.D1 do
+defmodule DayOne do
   def a do
-    file_path = Path.join(__DIR__, "input.txt")
+    file = Path.join(__DIR__, "input.txt")
 
-    case File.read(file_path) do
-      {:ok, content} ->
-        # IO.puts(content)
-
-        lines = String.split(content, "\n")
-
-        groups =
-          for line <- lines,
-              line != "",
-              do:
-                line |> String.split(~r/\s+/) |> Enum.map(&String.to_integer/1) |> List.to_tuple()
-
-        group_one = groups |> Enum.map(&elem(&1, 0)) |> Enum.sort()
-        group_two = groups |> Enum.map(&elem(&1, 1)) |> Enum.sort()
-
-        Enum.zip(group_one, group_two)
-        |> Enum.map(fn {a, b} -> abs(a - b) end)
-        |> Enum.sum()
-
-      {:error, reason} ->
-        IO.puts("Failed to read file: #{reason}")
-    end
+    File.stream!(file, :line)
+    |> Stream.map(&String.trim/1)
+    |> Stream.map(&String.split(&1, ~r/\s+/))
+    |> Stream.map(fn parts -> parts |> Enum.map(&String.to_integer/1) end)
+    |> Stream.zip()
+    |> Stream.map(fn list ->
+      list
+      |> Tuple.to_list()
+      |> Enum.sort()
+    end)
+    |> Enum.to_list()
+    |> Enum.zip()
+    |> Enum.map(fn {a, b} -> abs(a - b) end)
+    |> Enum.sum()
   end
 
   def b do
-    file_path = Path.join(__DIR__, "input.txt")
+    file = Path.join(__DIR__, "input.txt")
 
-    case File.read(file_path) do
-      {:ok, content} ->
-        # IO.puts(content)
+    [group_one, group_two] =
+      File.stream!(file, :line)
+      |> Stream.map(&String.trim/1)
+      |> Stream.map(&String.split(&1, ~r/\s+/))
+      |> Stream.map(fn parts -> parts |> Enum.map(&String.to_integer/1) end)
+      |> Stream.zip()
+      |> Stream.map(fn list ->
+        list
+        |> Tuple.to_list()
+        |> Enum.sort()
+      end)
+      |> Enum.to_list()
 
-        lines = String.split(content, "\n")
+    frequencies = Enum.frequencies(group_two)
 
-        groups =
-          for line <- lines,
-              line != "",
-              do:
-                line |> String.split(~r/\s+/) |> Enum.map(&String.to_integer/1) |> List.to_tuple()
-
-        group_one = groups |> Enum.map(&elem(&1, 0)) |> Enum.sort()
-        frequencies = groups |> Enum.map(&elem(&1, 1)) |> Enum.frequencies()
-
-        group_one
-        |> Enum.map(&(&1 * Map.get(frequencies, &1, 0)))
-        |> Enum.sum()
-
-      {:error, reason} ->
-        IO.puts("Failed to read file: #{reason}")
-    end
+    group_one
+    |> Enum.map(&(&1 * Map.get(frequencies, &1, 0)))
+    |> Enum.sum()
   end
 end
