@@ -81,14 +81,11 @@ defmodule DayTwo do
   def b do
     file = Path.join(__DIR__, "input.txt")
 
-    report =
-      File.stream!(file, :line)
-      |> Stream.map(&String.trim/1)
-      |> Stream.map(&String.split(&1, ~r/\s+/))
-      |> Stream.map(fn parts -> parts |> Enum.map(&String.to_integer/1) end)
-      |> Enum.to_list()
-
-    report
+    File.stream!(file, :line)
+    |> Stream.map(&String.trim/1)
+    |> Stream.map(&String.split(&1, ~r/\s+/))
+    |> Stream.map(fn parts -> parts |> Enum.map(&String.to_integer/1) end)
+    |> Enum.to_list()
     |> Enum.map(&dampened?/1)
     |> Enum.count(fn x -> x == true end)
   end
