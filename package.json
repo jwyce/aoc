@@ -1,0 +1,14 @@
+{
+	"name": "aoc-2025",
+	"type": "module",
+	"scripts": {
+		"get": "bun run scripts/get.ts",
+		"day": "bun run scripts/run.ts",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write ."
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@types/bun": "^1.1.14"
+	}
+}

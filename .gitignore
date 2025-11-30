@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+
+# Bun
+bun.lock
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
