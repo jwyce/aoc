@@ -1,7 +1,6 @@
 async function main() {
 	const arg = process.argv[2];
 
-	// Default to today's date in December
 	const today = new Date();
 	const defaultDay = today.getMonth() === 11 ? today.getDate() : 1;
 	const dayNum = arg ? Number.parseInt(arg, 10) : defaultDay;
@@ -24,11 +23,9 @@ async function main() {
 		process.exit(1);
 	}
 
-	// Create day directory
 	await Bun.write(`${dayDir}/.keep`, "");
 
-	// Fetch input
-	const year = 2024;
+	const year = 2025;
 	const inputUrl = `https://adventofcode.com/${year}/day/${dayNum}/input`;
 
 	console.log(`🎄 Fetching input for day ${dayNum}...`);
@@ -53,7 +50,6 @@ async function main() {
 	await Bun.write(`${dayDir}/input.txt`, input);
 	console.log(`📥 Saved input to ${dayStr}/input.txt`);
 
-	// Create index.ts template
 	const tsTemplate = `const input = await Bun.file(\`\${import.meta.dir}/input.txt\`).text();
 const lines = input.trim().split("\\n");
 
@@ -81,7 +77,6 @@ console.log("Part 2:", part2());
 		console.log(`🥟 Created ${dayStr}/index.ts`);
 	}
 
-	// Create OCaml solution.ml template
 	const mlTemplate = `let read_input () =
   let ic = open_in "input.txt" in
   let rec read_lines acc =
@@ -114,7 +109,6 @@ let () =
 		console.log(`🐫 Created ${dayStr}/solution.ml`);
 	}
 
-	// Create dune file
 	const duneTemplate = `(executable
  (name solution))
 `;
@@ -126,13 +120,12 @@ let () =
 		console.log(`${dayStr}/dune already exists, skipping...`);
 	} else {
 		await Bun.write(dunePath, duneTemplate);
-		console.log(`🏜️ Created ${dayStr}/dune`);
+		console.log(`🏜 Created ${dayStr}/dune`);
 	}
 
-	// Clean up .keep file
 	await Bun.file(`${dayDir}/.keep`).delete();
 
-	console.log('\nReady! Run with:');
+	console.log("\nReady! Run with:");
 	console.log(`  bun run day ${dayNum}`);
 	console.log(`  dune exec ./${dayStr}/solution.exe`);
 }
