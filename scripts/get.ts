@@ -31,7 +31,7 @@ async function main() {
 	const year = 2024;
 	const inputUrl = `https://adventofcode.com/${year}/day/${dayNum}/input`;
 
-	console.log(`Fetching input for day ${dayNum}...`);
+	console.log(`🎄 Fetching input for day ${dayNum}...`);
 
 	const response = await fetch(inputUrl, {
 		headers: {
@@ -51,10 +51,10 @@ async function main() {
 
 	const input = await response.text();
 	await Bun.write(`${dayDir}/input.txt`, input);
-	console.log(`Saved input to ${dayStr}/input.txt`);
+	console.log(`📥 Saved input to ${dayStr}/input.txt`);
 
 	// Create index.ts template
-	const template = `const input = await Bun.file(\`\${import.meta.dir}/input.txt\`).text();
+	const tsTemplate = `const input = await Bun.file(\`\${import.meta.dir}/input.txt\`).text();
 const lines = input.trim().split("\\n");
 
 function part1() {
@@ -77,14 +77,64 @@ console.log("Part 2:", part2());
 	if (await indexFile.exists()) {
 		console.log(`${dayStr}/index.ts already exists, skipping...`);
 	} else {
-		await Bun.write(indexPath, template);
-		console.log(`Created ${dayStr}/index.ts`);
+		await Bun.write(indexPath, tsTemplate);
+		console.log(`🥟 Created ${dayStr}/index.ts`);
+	}
+
+	// Create OCaml solution.ml template
+	const mlTemplate = `let read_input () =
+  let ic = open_in "input.txt" in
+  let rec read_lines acc =
+    try
+      let line = input_line ic in
+      read_lines (line :: acc)
+    with End_of_file ->
+      close_in ic;
+      List.rev acc
+  in
+  read_lines []
+
+let part1 _lines = 0
+
+let part2 _lines = 0
+
+let () =
+  let lines = read_input () in
+  Printf.printf "Part 1: %d\\n" (part1 lines);
+  Printf.printf "Part 2: %d\\n" (part2 lines)
+`;
+
+	const mlPath = `${dayDir}/solution.ml`;
+	const mlFile = Bun.file(mlPath);
+
+	if (await mlFile.exists()) {
+		console.log(`${dayStr}/solution.ml already exists, skipping...`);
+	} else {
+		await Bun.write(mlPath, mlTemplate);
+		console.log(`🐫 Created ${dayStr}/solution.ml`);
+	}
+
+	// Create dune file
+	const duneTemplate = `(executable
+ (name solution))
+`;
+
+	const dunePath = `${dayDir}/dune`;
+	const duneFile = Bun.file(dunePath);
+
+	if (await duneFile.exists()) {
+		console.log(`${dayStr}/dune already exists, skipping...`);
+	} else {
+		await Bun.write(dunePath, duneTemplate);
+		console.log(`🏜️ Created ${dayStr}/dune`);
 	}
 
 	// Clean up .keep file
 	await Bun.file(`${dayDir}/.keep`).delete();
 
-	console.log(`\nReady! Run with: bun run day ${dayNum}`);
+	console.log('\nReady! Run with:');
+	console.log(`  bun run day ${dayNum}`);
+	console.log(`  dune exec ./${dayStr}/solution.exe`);
 }
 
 main();

@@ -8,6 +8,12 @@ node_modules/
 # Bun
 bun.lock
 
+# OCaml/Dune
+_build/
+*.install
+*.byte
+*.native
+
 # IDE
 .vscode/
 .idea/
