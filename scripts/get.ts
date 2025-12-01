@@ -66,14 +66,14 @@ console.log("Part 1:", part1());
 console.log("Part 2:", part2());
 `;
 
-const indexPath = `${dayDir}/index.ts`;
-const indexFile = Bun.file(indexPath);
+const tsPath = `${dayDir}/solution.ts`;
+const tsFile = Bun.file(tsPath);
 
-if (await indexFile.exists()) {
-	console.log(`${dayStr}/index.ts already exists, skipping...`);
+if (await tsFile.exists()) {
+	console.log(`${dayStr}/solution.ts already exists, skipping...`);
 } else {
-	await Bun.write(indexPath, tsTemplate);
-	console.log(`🥟 Created ${dayStr}/index.ts`);
+	await Bun.write(tsPath, tsTemplate);
+	console.log(`🥟 Created ${dayStr}/solution.ts`);
 }
 
 const mlTemplate = `let read_input () =

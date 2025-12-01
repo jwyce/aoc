@@ -4,6 +4,7 @@
 	"scripts": {
 		"get": "bun run scripts/get.ts",
 		"day": "bun run scripts/run.ts",
+		"format": "biome format --write .",
 		"lint": "biome check .",
 		"lint:fix": "biome check --write ."
 	},

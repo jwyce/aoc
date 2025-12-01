@@ -13,12 +13,12 @@ if (Number.isNaN(dayNum) || dayNum < 1 || dayNum > 25) {
 }
 
 const dayStr = dayNum.toString().padStart(2, "0");
-const indexPath = `${import.meta.dir}/../${dayStr}/index.ts`;
+const tsPath = `${import.meta.dir}/../${dayStr}/solution.ts`;
 
-const file = Bun.file(indexPath);
+const file = Bun.file(tsPath);
 if (!(await file.exists())) {
 	console.error(`Day ${dayNum} not found. Run 'bun run get ${dayNum}' first.`);
 	process.exit(1);
 }
 
-await import(indexPath);
+await import(tsPath);
