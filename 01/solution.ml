@@ -1,5 +1,5 @@
 let read_input () =
-  let ic = open_in "input.txt" in
+  let ic = open_in "01/input.txt" in
   let rec read_lines acc =
     try
       let line = input_line ic in
