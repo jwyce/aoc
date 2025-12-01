@@ -1,56 +1,55 @@
-async function main() {
-	const arg = process.argv[2];
+const arg = process.argv[2];
 
-	const today = new Date();
-	const defaultDay = today.getMonth() === 11 ? today.getDate() : 1;
-	const dayNum = arg ? Number.parseInt(arg, 10) : defaultDay;
+const today = new Date();
+const defaultDay = today.getMonth() === 11 ? today.getDate() : 1;
+const dayNum = arg ? Number.parseInt(arg, 10) : defaultDay;
 
-	if (Number.isNaN(dayNum) || dayNum < 1 || dayNum > 25) {
-		console.error("Day must be a number between 1 and 25");
-		process.exit(1);
-	}
+if (Number.isNaN(dayNum) || dayNum < 1 || dayNum > 25) {
+	console.error("Day must be a number between 1 and 25");
+	process.exit(1);
+}
 
-	const dayStr = dayNum.toString().padStart(2, "0");
-	const dayDir = `${import.meta.dir}/../${dayStr}`;
+const dayStr = dayNum.toString().padStart(2, "0");
+const dayDir = `${import.meta.dir}/../${dayStr}`;
 
-	const { AOC_COOKIE, AOC_REPO, AOC_CONTACT } = process.env;
+const { AOC_COOKIE, AOC_REPO, AOC_CONTACT } = process.env;
 
-	if (!AOC_COOKIE || !AOC_REPO || !AOC_CONTACT) {
-		console.error("Missing required environment variables:");
-		console.error("  AOC_COOKIE - Your session cookie from adventofcode.com");
-		console.error("  AOC_REPO   - Your repository URL");
-		console.error("  AOC_CONTACT - Your contact email");
-		process.exit(1);
-	}
+if (!AOC_COOKIE || !AOC_REPO || !AOC_CONTACT) {
+	console.error("Missing required environment variables:");
+	console.error("  AOC_COOKIE - Your session cookie from adventofcode.com");
+	console.error("  AOC_REPO   - Your repository URL");
+	console.error("  AOC_CONTACT - Your contact email");
+	process.exit(1);
+}
 
-	await Bun.write(`${dayDir}/.keep`, "");
+await Bun.write(`${dayDir}/.keep`, "");
 
-	const year = 2025;
-	const inputUrl = `https://adventofcode.com/${year}/day/${dayNum}/input`;
+const year = 2025;
+const inputUrl = `https://adventofcode.com/${year}/day/${dayNum}/input`;
 
-	console.log(`🎄 Fetching input for day ${dayNum}...`);
+console.log(`🎄 Fetching input for day ${dayNum}...`);
 
-	const response = await fetch(inputUrl, {
-		headers: {
-			Cookie: AOC_COOKIE,
-			"User-Agent": `${AOC_REPO} by ${AOC_CONTACT}`,
-		},
-	});
+const response = await fetch(inputUrl, {
+	headers: {
+		Cookie: AOC_COOKIE,
+		"User-Agent": `${AOC_REPO} by ${AOC_CONTACT}`,
+	},
+});
 
-	if (!response.ok) {
-		console.error(
-			`Failed to fetch input: ${response.status} ${response.statusText}`,
-		);
-		const text = await response.text();
-		console.error(text);
-		process.exit(1);
-	}
+if (!response.ok) {
+	console.error(
+		`Failed to fetch input: ${response.status} ${response.statusText}`,
+	);
+	const text = await response.text();
+	console.error(text);
+	process.exit(1);
+}
 
-	const input = await response.text();
-	await Bun.write(`${dayDir}/input.txt`, input);
-	console.log(`📥 Saved input to ${dayStr}/input.txt`);
+const input = await response.text();
+await Bun.write(`${dayDir}/input.txt`, input);
+console.log(`📥 Saved input to ${dayStr}/input.txt`);
 
-	const tsTemplate = `const input = await Bun.file(\`\${import.meta.dir}/input.txt\`).text();
+const tsTemplate = `const input = await Bun.file(\`\${import.meta.dir}/input.txt\`).text();
 const lines = input.trim().split("\\n");
 
 function part1() {
@@ -67,17 +66,17 @@ console.log("Part 1:", part1());
 console.log("Part 2:", part2());
 `;
 
-	const indexPath = `${dayDir}/index.ts`;
-	const indexFile = Bun.file(indexPath);
+const indexPath = `${dayDir}/index.ts`;
+const indexFile = Bun.file(indexPath);
 
-	if (await indexFile.exists()) {
-		console.log(`${dayStr}/index.ts already exists, skipping...`);
-	} else {
-		await Bun.write(indexPath, tsTemplate);
-		console.log(`🥟 Created ${dayStr}/index.ts`);
-	}
+if (await indexFile.exists()) {
+	console.log(`${dayStr}/index.ts already exists, skipping...`);
+} else {
+	await Bun.write(indexPath, tsTemplate);
+	console.log(`🥟 Created ${dayStr}/index.ts`);
+}
 
-	const mlTemplate = `let read_input () =
+const mlTemplate = `let read_input () =
   let ic = open_in "input.txt" in
   let rec read_lines acc =
     try
@@ -99,35 +98,32 @@ let () =
   Printf.printf "Part 2: %d\\n" (part2 lines)
 `;
 
-	const mlPath = `${dayDir}/solution.ml`;
-	const mlFile = Bun.file(mlPath);
+const mlPath = `${dayDir}/solution.ml`;
+const mlFile = Bun.file(mlPath);
 
-	if (await mlFile.exists()) {
-		console.log(`${dayStr}/solution.ml already exists, skipping...`);
-	} else {
-		await Bun.write(mlPath, mlTemplate);
-		console.log(`🐫 Created ${dayStr}/solution.ml`);
-	}
+if (await mlFile.exists()) {
+	console.log(`${dayStr}/solution.ml already exists, skipping...`);
+} else {
+	await Bun.write(mlPath, mlTemplate);
+	console.log(`🐫 Created ${dayStr}/solution.ml`);
+}
 
-	const duneTemplate = `(executable
+const duneTemplate = `(executable
  (name solution))
 `;
 
-	const dunePath = `${dayDir}/dune`;
-	const duneFile = Bun.file(dunePath);
+const dunePath = `${dayDir}/dune`;
+const duneFile = Bun.file(dunePath);
 
-	if (await duneFile.exists()) {
-		console.log(`${dayStr}/dune already exists, skipping...`);
-	} else {
-		await Bun.write(dunePath, duneTemplate);
-		console.log(`🏜 Created ${dayStr}/dune`);
-	}
-
-	await Bun.file(`${dayDir}/.keep`).delete();
-
-	console.log("\nReady! Run with:");
-	console.log(`  bun run day ${dayNum}`);
-	console.log(`  dune exec ./${dayStr}/solution.exe`);
+if (await duneFile.exists()) {
+	console.log(`${dayStr}/dune already exists, skipping...`);
+} else {
+	await Bun.write(dunePath, duneTemplate);
+	console.log(`🏜 Created ${dayStr}/dune`);
 }
 
-main();
+await Bun.file(`${dayDir}/.keep`).delete();
+
+console.log("\nReady! Run with:");
+console.log(`  bun run day ${dayNum}`);
+console.log(`  dune exec ./${dayStr}/solution.exe`);
