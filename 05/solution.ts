@@ -1,4 +1,5 @@
 const input = await Bun.file(`${import.meta.dir}/input.txt`).text();
+
 const [rangeStr, dataStr] = input
 	.trim()
 	.split("\n\n")
