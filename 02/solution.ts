@@ -9,7 +9,7 @@ const ranges = input.trim().split(",");
 
 function nextEvenDigitNum(n: number) {
 	const len = `${n}`.length;
-	return len % 2 === 0 ? n : 10 ** (len + 1);
+	return len % 2 === 0 ? n : 10 ** len;
 }
 
 function lastEvenDigitNum(n: number) {
@@ -58,7 +58,7 @@ function part2() {
 
 		const ids = new Set<number>();
 
-    // look at all digit lens of start to end and their factors
+		// look at all digit lens of start to end and their factors
 		for (let len = lenS; len <= lenE; len++) {
 			for (const factor of factors(len)) {
 				const rFactor = len / factor;
