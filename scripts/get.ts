@@ -76,26 +76,17 @@ if (await tsFile.exists()) {
 	console.log(`🥟 Created ${dayStr}/solution.ts`);
 }
 
-const mlTemplate = `let read_input () =
-  let ic = open_in "${dayStr}/input.txt" in
-  let rec read_lines acc =
-    try
-      let line = input_line ic in
-      read_lines (line :: acc)
-    with End_of_file ->
-      close_in ic;
-      List.rev acc
-  in
-  read_lines []
+const mlTemplate = `open Base
+open Stdio
 
+let read_input () = In_channel.read_lines "${dayStr}/input.txt"
 let part1 _lines = 0
-
 let part2 _lines = 0
 
 let () =
   let lines = read_input () in
-  Printf.printf "Part 1: %d\\n" (part1 lines);
-  Printf.printf "Part 2: %d\\n" (part2 lines)
+  printf "Part 1: %d\\n" (part1 lines);
+  printf "Part 2: %d\\n" (part2 lines)
 `;
 
 const mlPath = `${dayDir}/solution.ml`;
@@ -109,7 +100,8 @@ if (await mlFile.exists()) {
 }
 
 const duneTemplate = `(executable
- (name solution))
+ (name solution)
+ (libraries base core))
 `;
 
 const dunePath = `${dayDir}/dune`;
