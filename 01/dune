@@ -1,3 +1,4 @@
 (executable
  (name solution)
- (libraries base core))
+ (libraries base core)
+ (preprocess (pps ppx_jane)))

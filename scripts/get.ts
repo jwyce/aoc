@@ -76,8 +76,7 @@ if (await tsFile.exists()) {
 	console.log(`🥟 Created ${dayStr}/solution.ts`);
 }
 
-const mlTemplate = `open Base
-open Stdio
+const mlTemplate = `open Stdio
 
 let read_input () = In_channel.read_lines "${dayStr}/input.txt"
 let part1 _lines = 0
@@ -101,7 +100,8 @@ if (await mlFile.exists()) {
 
 const duneTemplate = `(executable
  (name solution)
- (libraries base core))
+ (libraries base core)
+ (preprocess (pps ppx_jane)))
 `;
 
 const dunePath = `${dayDir}/dune`;

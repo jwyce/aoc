@@ -42,12 +42,12 @@ let num_clicks rotations =
   in
   count
 
-let part1 _lines =
-  let rotations = rotations _lines in
+let part1 lines =
+  let rotations = rotations lines in
   num_zeros rotations
 
-let part2 _lines =
-  let rotations = rotations _lines in
+let part2 lines =
+  let rotations = rotations lines in
   num_clicks rotations
 
 let () =
