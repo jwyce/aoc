@@ -10,6 +10,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
-		"@types/bun": "^1.1.14"
+		"@types/bun": "^1.1.14",
+		"mnemonist": "^0.40.3"
 	}
 }
