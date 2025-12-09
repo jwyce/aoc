@@ -57,19 +57,21 @@ let part2 lines =
   let points = parse_points lines in
   let uf_nodes = make_uf points in
   let pairs = sorted_pairs points in
+  let n = Array.length points in
 
-  let rec go = function
+  let rec go num_groups = function
     | [] -> 0
     | (_, i, k) :: rest ->
-        let was_different =
-          not (Union_find.same_class uf_nodes.(i) uf_nodes.(k))
-        in
-        Union_find.union uf_nodes.(i) uf_nodes.(k);
-        if was_different && List.length (group_sizes uf_nodes) = 1 then
-          points.(i).x * points.(k).x
-        else go rest
+        if Union_find.same_class uf_nodes.(i) uf_nodes.(k) then
+          go num_groups rest
+        else begin
+          Union_find.union uf_nodes.(i) uf_nodes.(k);
+          if num_groups = 2 then (* was 2, now 1 *)
+            points.(i).x * points.(k).x
+          else go (num_groups - 1) rest
+        end
   in
-  go pairs
+  go n pairs
 
 let () =
   let lines = read_input () in
