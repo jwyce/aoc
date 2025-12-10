@@ -1,0 +1,4 @@
+(executable
+ (name solution)
+ (libraries base core lp lp-glpk)
+ (preprocess (pps ppx_jane)))
